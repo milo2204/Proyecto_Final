@@ -37,7 +37,7 @@ class BootStrap {
         ju.actividad = actividad;
         ju.save(flush: true, failOnError: true);
 
-        actividad.addToRespuestasActividad(respuesta);
+        //actividad.addToRespuestasActividad(respuesta);
         actividad.save();
 
         RegistroRespuestaAct.create(actividad,respuesta);

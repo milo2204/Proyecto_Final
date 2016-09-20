@@ -6,7 +6,7 @@ import groovy.transform.ToString
 import proyecto_final.Actividad
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
-@Resource(uri='/respuestaActividad',formats=['json', 'xml'])
+//@Resource(uri='/respuestaActividad',formats=['json', 'xml']) //TODO: estas utilizando el mecanismo por defecto, no entra al services.
 class RespuestaActividad {
 
     int cantidadRespuestasCorrectas;

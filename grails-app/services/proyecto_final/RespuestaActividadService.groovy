@@ -11,30 +11,25 @@ class RespuestaActividadService {
 
     }
 
-    def save(RespuestaRest resp){
+    /**
+     *
+     * @param resp
+     * @return
+     */
+    public RespuestaActividad save(RespuestaRest resp){
+        println("Registrado respuesta: "+resp.properties)
         def respuesta = new RespuestaActividad();
         respuesta.cantidadRespuestasCorrectas = resp.cantidadRespuestasCorrectas
         respuesta.cantidadRespuestasIncorrectas = resp.cantidadRespuestasIncorrectas
         respuesta.puntuacion = resp.puntuacion
         respuesta.fecha = new Date();
 
-        def act = Actividad.findById(resp.idActividad)
+        respuesta.save(flush: true, failOnError: true)
 
-        try {
-            respuesta.save(flush: true, failOnError: true)
-        }catch (Exception e) {
-            println(e.getMessage())
-        }
+        def act = Actividad.get(resp.idActividad as Long)
+        println("La actividad: "+act?.properties)
+        RegistroRespuestaAct.create(act,respuesta, true)
 
-
-        try {
-            print("CREANDO LA RESPUESTA")
-            RegistroRespuestaAct.create(act,respuesta)
-            act.addToRespuestasActividad(respuesta)
-            act.save()
-        }catch (Exception e){
-            println(e.getMessage())
-        }
-
+        return respuesta;
     }
 }

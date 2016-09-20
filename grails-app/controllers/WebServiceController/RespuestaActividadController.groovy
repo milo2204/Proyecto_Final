@@ -14,7 +14,7 @@ import proyecto_final.RespuestaActividadService
 class RespuestaActividadController extends RestfulController<RespuestaActividad> {
 
     static responseFormats = ["json"]
-    private RespuestaActividadService service;
+    def respuestaActividadService;
 
     RespuestaActividadController(){
         super(RespuestaActividad)
@@ -29,25 +29,8 @@ class RespuestaActividadController extends RestfulController<RespuestaActividad>
     }
 
     def save(RespuestaRest resp){
-        service.save(resp)
-
-        /*def respuesta = new RespuestaActividad()
-        respuesta.cantidadRespuestasCorrectas = resp.cantidadRespuestasCorrectas
-        respuesta.cantidadRespuestasIncorrectas = resp.cantidadRespuestasIncorrectas
-        respuesta.puntuacion = resp.puntuacion
-        respuesta.fecha = new Date();
-
-        Actividad act = Actividad.findByNombre(resp.idActividad)
-
-        try {
-            respuesta.save(failOnError: true, flush: true)
-
-        }catch(Exception e) {
-            System.println(e.getMessage());
-        }
-
-        RegistroRespuestaAct.create(act, respuesta)
-        println("Ya creado")*/
+        RespuestaActividad respuesta = respuestaActividadService.save(resp)
+        respond(respuesta, [formats: ['json','xml' ]])
     }
 
     def update(){

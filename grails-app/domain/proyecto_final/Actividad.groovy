@@ -18,7 +18,7 @@ class Actividad {
     String comentarioSobreActividad;
     String encabezado;
 
-    static hasMany = [respuestasActividad:RespuestaActividad];
+    //static hasMany = [respuestasActividad:RespuestaActividad];
     static hasOne = [juego:Juego];
 
 
