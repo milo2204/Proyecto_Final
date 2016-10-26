@@ -38,13 +38,14 @@
     <script src="${resource(dir: 'js', file: 'modernizr.custom.js')}"></script>
 
     <style>
-    #selectable .ui-selecting { background: #FECA40; }
-    #selectable .ui-selected { background: #F39814; color: white; }
-    #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
-    #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
-    .linea-invisible {  margin: 150px; visibility:hidden;}
-    .container-actividades {display: none;}
-    .muestra-container-actividades {display:none;}
+        #selectable .ui-selecting { background: #FECA40; }
+        #selectable .ui-selected { background: #F39814; color: white; }
+        #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+        #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
+        .linea-invisible {  margin: 150px; visibility:hidden;}
+        .container-actividades {display: none;}
+        .muestra-container-actividades {display:none;}
+        .btn {  float: right;}
     </style>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -219,6 +220,7 @@
         <!-- /top navigation -->
 
         <!-- page content -->
+        <g:form>
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -283,6 +285,8 @@
                                     </div><!-- /content-->
                                 </div><!-- /container -->
 
+                                <button type="submit" class="btn btn-primary btn-">Guardar</button>
+
                                 <!--Donde se arrastra las actividades seleccionadads-->
                                 <div id="drop-area" class="drop-area">
                                     <div>
@@ -298,7 +302,9 @@
                 </div>
             </div>
         </div>
+        </g:form>
     </div>
+
 
 
     <!--page content-->
@@ -381,11 +387,7 @@
                     }, 800);
                     // ...
 
-
-
-
                     //verificacion de la lista
-                    alert("Existe: " + arrayElementos.indexOf(id));
                     if (arrayElementos.indexOf(id) == -1) {
                         //Para borrar el elemento seleccionado
                         $("#grid " + "#" + id).remove();
@@ -395,7 +397,7 @@
                         $("#grid2").append('<div class="grid__item"><h4>' + nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>').fadeIn();
                         $(".muestra-container-actividades").fadeIn();
                     }
-                    alert(arrayElementos);
+                    //alert(arrayElementos);
                     //This is for the focus on the div sepecified
                     $(window).scrollTop($(".muestra-container-actividades").offset().top-20);
 
