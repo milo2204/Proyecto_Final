@@ -42,8 +42,9 @@
     #selectable .ui-selected { background: #F39814; color: white; }
     #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
     #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
-    hr {  margin: 150px; visibility:hidden; }
+    .linea-invisible {  margin: 150px; visibility:hidden;}
     .container-actividades {display: none;}
+    .muestra-container-actividades {display:none;}
     </style>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -252,8 +253,11 @@
                                     <li class="ui-state-default" id="${juego.id}" ><h4>${juego.nombre}</h4></li>
                                 </g:each>
                                 </ol></center>
-                                <hr/>
+                                <hr class="linea-invisible"/>
+
                                 <!--Aqui estaran las actividades de la cateooria seleccionada -->
+                                <h1>Actividades</h1>
+                                <hr/>
                                 <div class="container container-actividades">
                                     <br/>
                                     <div class="content">
@@ -264,9 +268,9 @@
                                         </div>
                                     </div><!-- /content-->
                                 </div><!-- /container -->
+                                <hr/>
 
-
-
+                                <h1>Actividades Agregadas</h1>
                                 <!--Para mostrar las actividades seleccionadads-->
                                 <div class="container muestra-container-actividades">
                                     <br/>
@@ -283,13 +287,7 @@
                                 <div id="drop-area" class="drop-area">
                                     <div>
                                         <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <!--<div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>
-                                        <div class="drop-area__item"><div class="dummy"></div></div>-->
+
                                     </div>
                                 </div>
                                 <div class="drop-overlay"></div>
@@ -326,6 +324,7 @@
 <!-- Custom Theme Scripts -->
 <script src="${resource(dir: 'js', file: 'custom.min.js')}"></script>
 
+<!-- scripts para el draggable -->
 <script src="${resource(dir: 'js',file: 'draggabilly.pkgd.min.js')}"></script>
 <script src="${resource(dir: 'js',file: 'dragdrop.js')}"></script>
 <script type="text/javascript">
@@ -345,24 +344,26 @@
             type: "POST",
             data: {id: juegoId},
             success: function (data) {
-                $('.grid__item').remove();
+                $('#grid .grid__item').remove();
                 for(var key in data){
                     $("#grid").append('<div class="grid__item" id="' + data[key].id +'"><h4>' + data[key].nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>');
                     //$(".drop-area div").append(' <div class="drop-area__item"><div class="dummy"></div></div>');
-                    startDraggables(data[key].id);
+                    startDraggables(data[key].id,data[key].nombre);
 
                 }
+                //$(".container").load("http://localhost:8080/Proyecto_Final/crearUsuario");
+                $(".container-actividades").fadeIn();
+
+                //This is for the focus on the div sepecified
+                $(window).scrollTop($(".container-actividades").offset().top-20);
 
             }
-        });
-        //$(".container").load("http://localhost:8080/Proyecto_Final/crearUsuario");
-        $(".container-actividades").fadeIn();
 
-        //This is for the focus on the div sepecified
-        $(window).scrollTop($("#selectable").offset().top-20);
+        });
+
 
     });
-    function startDraggables(id) {
+    function startDraggables(id,nombre) {
 
         var body = document.body,
                 dropArea = document.getElementById( 'drop-area' ),
@@ -373,16 +374,32 @@
 
                 onDrop : function( instance, draggableEl ) {
                     // show checkmark inside the droppabe element
-                    classie.add( instance.el, 'drop-feedback' );
-                    clearTimeout( instance.checkmarkTimeout );
-                    instance.checkmarkTimeout = setTimeout( function() {
-                        classie.remove( instance.el, 'drop-feedback' );
-                    }, 800 );
+                    classie.add(instance.el, 'drop-feedback');
+                    clearTimeout(instance.checkmarkTimeout);
+                    instance.checkmarkTimeout = setTimeout(function () {
+                        classie.remove(instance.el, 'drop-feedback');
+                    }, 800);
                     // ...
 
-                    //Para borrar el elemento seleccionado
-                    alert(id);
-                    $( "#grid " + "#"+id).remove();
+
+
+
+                    //verificacion de la lista
+                    alert("Existe: " + arrayElementos.indexOf(id));
+                    if (arrayElementos.indexOf(id) == -1) {
+                        //Para borrar el elemento seleccionado
+                        $("#grid " + "#" + id).remove();
+
+                        //Para agregar los elementos a la lista
+                        arrayElementos.push(id);
+                        $("#grid2").append('<div class="grid__item"><h4>' + nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>').fadeIn();
+                        $(".muestra-container-actividades").fadeIn();
+                    }
+                    alert(arrayElementos);
+                    //This is for the focus on the div sepecified
+                    $(window).scrollTop($(".muestra-container-actividades").offset().top-20);
+
+                    //alert(nombre);
                 }
             } ) );
         } );
