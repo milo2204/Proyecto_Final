@@ -10,23 +10,26 @@ import groovy.transform.ToString
 @Resource(uri='/actividad',formats=['json', 'xml'])
 class Actividad {
 
-    static constraints = {
-        //juego nullable: true;
-    }
 
     String nombre;
     String comentarioSobreActividad;
     String encabezado;
 
-    //static hasMany = [respuestasActividad:RespuestaActividad];
+    static hasMany = [respuestaActividad:RespuestaActividad];
     static hasOne = [juego:Juego];
 
 
-
     static mapping = {
-        table "ACTIVIDADES"
+        table "Actividades"
         id  column: 'actividad_Id'
         juego column: 'juego_Id'
 
+    }
+
+    static constraints = {
+        //juego nullable: true;
+        nombre blank: false, nullable: false
+        comentarioSobreActividad blank: true, nullable: true
+        encabezado blank: false, nullable: false
     }
 }

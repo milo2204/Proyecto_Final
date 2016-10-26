@@ -5,6 +5,7 @@ import grails.validation.Validateable
 /**
  * Created by Mikey on 9/7/16.
  */
+
 @Validateable
 class RespuestaRest{
 
@@ -13,4 +14,5 @@ int cantidadRespuestasIncorrectas
 int puntuacion
 String idActividad
 Date fecha
+
 }

@@ -37,6 +37,11 @@ class BootStrap {
         def adminUser = new User()
         adminUser.username = "admin"
         adminUser.password = "admin"
+        adminUser.email = "admin@admin.com"
+        adminUser.nombre = "admin"
+        adminUser.apellido = "admin"
+        adminUser.telefono = "809-226-9851"
+
         adminUser.save(flush: true, failOnError: true)
 
         try {
@@ -57,12 +62,32 @@ class BootStrap {
         ju.date = newDate;
         ju.save(flush: true);
 
+        Juego ju2 = new Juego();
+        ju2.nombre = "Prueba Juego 2";
+        ju2.categoria = categoria;
+        ju2.date = newDate;
+        ju2.save(flush: true);
+
         Actividad actividad = new Actividad();
         actividad.nombre = "Prueba Actividad";
         actividad.encabezado = "Es una prueba.";
         actividad.comentarioSobreActividad = "Es un comentario";
         actividad.juego = ju;
         actividad.save(flush: true, failOnError: true);
+
+        Actividad actividad1 = new Actividad();
+        actividad1.nombre = "Prueba Actividad 1";
+        actividad1.encabezado = "Es una prueba.";
+        actividad1.comentarioSobreActividad = "Es un comentario";
+        actividad1.juego = ju;
+        actividad1.save(flush: true, failOnError: true);
+
+        Actividad actividad2 = new Actividad();
+        actividad2.nombre = "Prueba Actividad 2";
+        actividad2.encabezado = "Es una prueba.";
+        actividad2.comentarioSobreActividad = "Es un comentario";
+        actividad2.juego = ju;
+        actividad2.save(flush: true, failOnError: true);
 
         RespuestaActividad respuesta = new RespuestaActividad();
         respuesta.cantidadRespuestasCorrectas = 2;
@@ -72,11 +97,23 @@ class BootStrap {
         respuesta.save();
 
         //Actualizando
-        ju.actividad = actividad;
+        ju.addToActividades(actividad);
         ju.save(flush: true, failOnError: true);
+
+        ju2.addToActividades(actividad1);
+        ju2.save(flush: true, failOnError: true);
+
+        ju2.addToActividades(actividad2);
+        ju2.save(flush: true, failOnError: true);
 
         actividad.addToRespuestaActividad(respuesta);
         actividad.save(flush: true,failOnError: true);
+
+        actividad1.addToRespuestaActividad(respuesta);
+        actividad1.save(flush: true,failOnError: true);
+
+        actividad2.addToRespuestaActividad(respuesta);
+        actividad2.save(flush: true,failOnError: true);
 
         //RegistroRespuestaAct.create(actividad,respuesta);
         println("Se creo...")

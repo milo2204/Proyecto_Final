@@ -3,6 +3,8 @@ package proyecto_final
 class Categoria {
 
     static constraints = {
+        name nullable: false
+        juego nullable: false
     }
 
     String name

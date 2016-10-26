@@ -3,13 +3,16 @@ package proyecto_final
 class Juego {
 
     static constraints = {
+        nombre nullable: false
+        date nullable: false
+        categoria nullable: false
+
     }
 
 
     String nombre
     Date date
-    Actividad actividad;
-
+    static hasMany = [actividades:Actividad];
     static hasOne = [categoria:Categoria];
 
 

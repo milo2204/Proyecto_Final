@@ -15,11 +15,15 @@ class RespuestaActividad {
     int puntuacion;
 
     static constraints = {
+        cantidadRespuestasCorrectas blank: false, nullable:false
+        cantidadRespuestasIncorrectas blank:false, nullable:false
+        fecha nullable:false, blank:false
+        puntuacion nullable:false, blank:false
 
     }
 
     static mapping = {
-        table "RESPUESTAACTIVIDADES"
+        table "RespuestasActividades"
         id generator: 'identity', column: 'respuestaActividad_Id'
     }
 
