@@ -42,8 +42,14 @@
         #selectable .ui-selected { background: #F39814; color: white; }
         #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
         #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
-        .linea-invisible {  margin: 150px; visibility:hidden;}
-        .container-actividades {display: none;}
+        #selectable2 .ui-selecting { background: #FECA40; }
+        #selectable2 .ui-selected { background: #F39814; color: white; }
+        #selectable2 { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+        #selectable2 li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
+        #parametros {display: none;}
+        .linea-invisible {  margin-top: 150px; visibility:hidden;}
+        .linea-juegos {margin-top: 30px;}
+        .container-categorias {display: none;}
         .muestra-container-actividades {display:none;}
         .btn {  float: right;}
     </style>
@@ -248,19 +254,52 @@
                             </div>
                             <div class="x_content">
                                 <br />
-                                <!--Esta es la parte para mostrar las Categorias con for de grails-->
+                                <label>Materias:</label>
+                                <select id="materias">
+                                    <option id="none">--Ninguna--</option>
+                                    <g:each in="${materias}" var="mat">
+                                        <option value="'${mat.nombreMateria}'">${mat.nombreMateria}</option>
+                                    </g:each>
+                                </select>
 
-                                <center><ol id="selectable">
-                                <g:each in="${juegos}" var="juego">
-                                    <li class="ui-state-default" id="${juego.id}" ><h4>${juego.nombre}</h4></li>
-                                </g:each>
-                                </ol></center>
+                                <label>Grupos:</label>
+                                <select id="grupos">
+                                </select>
+
+                                <label>Estudiantes:</label>
+                                <select id="estudiantes">
+
+                                </select>
+
+                                <h1>Juegos</h1>
+                                <hr class="linea-juegos"/>
+
+                                <!--Esta es la parte para mostrar las Categorias con for de grails-->
+                                <div id="juegos">
+                                    <center><ol id="selectable">
+                                    <g:each in="${juegos}" var="juego">
+                                        <li class="ui-state-default" id="${juego.id}" ><h4>${juego.nombre}</h4></li>
+                                    </g:each>
+                                    </ol></center>
+                                </div>
                                 <hr class="linea-invisible"/>
 
-                                <!--Aqui estaran las actividades de la cateooria seleccionada -->
-                                <h1>Actividades</h1>
+                                <!--Aqui estaran las categorias de la cateooria seleccionada -->
+                                <h1>Categorias</h1>
                                 <hr/>
-                                <div class="container container-actividades">
+                                <div id="categorias">
+                                    <center>
+                                        <ol id="selectable2">
+
+                                        </ol>
+                                    </center><br/>
+                                    <div id="parametros">
+                                        <div><label>Numero de Jugadas</label><select id="opcionesJugadas1"></select></div>
+                                        <div></div><label>Numero Minimo</label><select id="opcionesMinimo2"></select></div>
+                                        <div><label>Numero Maximo</label><select id="opcionesMaximo3"></select></div>
+                                    </div>
+                                </div>
+                                <div class="container container-categorias">
                                     <br/>
                                     <div class="content">
                                         <!--Las actividades se muestran dependiendo el juego-->
@@ -334,34 +373,53 @@
 <script src="${resource(dir: 'js',file: 'draggabilly.pkgd.min.js')}"></script>
 <script src="${resource(dir: 'js',file: 'dragdrop.js')}"></script>
 <script type="text/javascript">
+    //Arreglos para actividades agregadas
     var arrayElementos = [];
+
     $(document).ready(function (){
+        //Numero de jugadas son 5
+        for(var i =1;i<6;i++){
+            $("#opcionesJugadas").append('<option id="' +i+'" value="'+i+'">'+i+'</option>');
+        }
     });
 
 
     $( function() {
         $( "#selectable" ).selectable();
+        $("#selectable2").selectable();
     } );
 
-    $(".ui-state-default").click(function () {
+
+    $("#selectable .ui-state-default").click(function () {
         var juegoId = $(this).prop("id");
+        var juegoNombre = $(this).text();
         jQuery.ajax({
-            url: "${createLink(controller: 'asignarActividad', action: 'obtenerActividades')}",
-            type: "POST",
-            data: {id: juegoId},
+            url: "${createLink(controller: 'asignarActividad', action: 'obtenerCategorias')}",
+            type: "GET",
+            data: {juegoId: juegoId},
             success: function (data) {
-                $('#grid .grid__item').remove();
+                //$('#grid .grid__item').remove();
+                $("#selectable2 .ui-state-default").remove();
+
+                //Para orginar la data
+                data.sort(function(a,b){
+                    return a.id - b.id;
+                });
+
                 for(var key in data){
-                    $("#grid").append('<div class="grid__item" id="' + data[key].id +'"><h4>' + data[key].nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>');
+                    $("#selectable2").append('<li class="ui-state-default " id="' + data[key].id  + '" ><h4>' + data[key].name + '</h4></li>');
+                    //$("#grid").append('<div class="grid__item" id="' + data[key].id +'"><h4>' + data[key].name + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>');
                     //$(".drop-area div").append(' <div class="drop-area__item"><div class="dummy"></div></div>');
-                    startDraggables(data[key].id,data[key].nombre);
+                    //startDraggables(data[key].id,data[key].nombre);
 
                 }
+                categoriasClick(juegoNombre,juegoId);
+
                 //$(".container").load("http://localhost:8080/Proyecto_Final/crearUsuario");
-                $(".container-actividades").fadeIn();
+                $(".container-categorias").fadeIn();
 
                 //This is for the focus on the div sepecified
-                $(window).scrollTop($(".container-actividades").offset().top-20);
+                $(window).scrollTop($(".container-categorias").offset().top-20);
 
             }
 
@@ -369,6 +427,17 @@
 
 
     });
+
+    function categoriasClick(juegoNombre,juegoId){
+        $("#selectable2 .ui-state-default").click(function () {
+
+        });
+
+    }
+
+
+
+    //Para seleccion de materias
     function startDraggables(id,nombre) {
 
         var body = document.body,
@@ -394,9 +463,23 @@
 
                         //Para agregar los elementos a la lista
                         arrayElementos.push(id);
-                        $("#grid2").append('<div class="grid__item"><h4>' + nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>').fadeIn();
+                        $("#grid2").append('<div class="grid__item" id="' + id +'"><span class="close" style="margin-top:-63px;margin-left:2px;float:left;">x</span><h4>' + nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>').fadeIn();
                         $(".muestra-container-actividades").fadeIn();
                     }
+
+                    //Boton cerrar para cada actividad agregada
+                    $( ".close").click(function (){
+                        var closeId = $(this).parent().prop("id");
+                        //alert("Cantidad elementos " + arrayElementos.length);
+                        //alert("Esta dentro del arreglo " + arrayElementos.indexOf(parseInt(closeId)));
+                        if(arrayElementos.indexOf(parseInt(closeId)) >= 0){
+                            //alert(arrayElementos);
+                            var removed = arrayElementos.splice(arrayElementos.indexOf(parseInt(closeId)),1);
+                            $("#grid2 " + "#" + closeId).remove();
+                        }
+                        //alert("Cantidad elementos despues" + arrayElementos.length);
+
+                    });
                     //alert(arrayElementos);
                     //This is for the focus on the div sepecified
                     $(window).scrollTop($(".muestra-container-actividades").offset().top-20);
@@ -443,6 +526,8 @@
         } );
 
     }
+
+    //Para los draggables de activad.
     (function() {
         startDraggables();
     })();

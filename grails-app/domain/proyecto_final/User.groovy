@@ -17,17 +17,14 @@ class User implements Serializable {
 	String nombre
 	String apellido
 	String telefono
-	boolean esEstudiante
-	boolean esProfesor
-	boolean esPadre
 	boolean esAdmin
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
 
-	User(String username, String password, String email, String nombre, String apellido, String telefono, String verificarContrasena,
-		 Boolean esEstudiante,boolean esPadre,boolean esProfesor, boolean esAdmin) {
+
+	User(String username, String password, String email, String nombre, String apellido, String telefono, String verificarContrasena, boolean esAdmin) {
 		this()
 		this.username = username
 		this.password = password
@@ -36,9 +33,7 @@ class User implements Serializable {
 		this.apellido = apellido
 		this.telefono = telefono
 		this.esAdmin = esAdmin
-		this.esEstudiante = esEstudiante
-		this.esPadre = esPadre
-		this.esProfesor = esProfesor
+
 	}
 
 	Set<Role> getAuthorities() {

@@ -4,11 +4,9 @@ class Categoria {
 
     static constraints = {
         name nullable: false
-        juego nullable: false
     }
-
+     static hasMany = [parametros:Integer]
     String name
-    Juego juego;
 
     static mapping = {
         table "CATEGORIAS"
