@@ -22,8 +22,8 @@ public  int getCantidadRespuestasIncorrectas() { return (int)0;}
 public  void setCantidadRespuestasIncorrectas(int value) { }
 public  int getPuntuacion() { return (int)0;}
 public  void setPuntuacion(int value) { }
-public  java.lang.String getPrueba() { return (java.lang.String)null;}
-public  void setPrueba(java.lang.String value) { }
+public  java.lang.String getIdActividad() { return (java.lang.String)null;}
+public  void setIdActividad(java.lang.String value) { }
 public  java.util.Date getFecha() { return (java.util.Date)null;}
 public  void setFecha(java.util.Date value) { }
 }

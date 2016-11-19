@@ -17,6 +17,8 @@ super ((java.lang.Class)null);
 }
 public static  java.lang.Object getResponseFormats() { return null;}
 public static  void setResponseFormats(java.lang.Object value) { }
+public  java.lang.Object getRespuestaActividadService() { return null;}
+public  void setRespuestaActividadService(java.lang.Object value) { }
 public  java.lang.Object index() { return null;}
 public  java.lang.Object show() { return null;}
 public  java.lang.Object save(com.proyectofinal.encapsulacion.rest.RespuestaRest resp) { return null;}

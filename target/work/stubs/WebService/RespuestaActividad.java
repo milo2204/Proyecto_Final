@@ -7,7 +7,7 @@ import java.util.*;
 import groovy.lang.*;
 import groovy.util.*;
 
-@grails.rest.Resource(formats={"json","xml"}, uri="/respuestaActividad") public class RespuestaActividad
+@groovy.transform.EqualsAndHashCode(includes="username") @groovy.transform.ToString(includeNames=true, includes="username", includePackage=false) public class RespuestaActividad
   extends java.lang.Object  implements
     groovy.lang.GroovyObject {
 ;

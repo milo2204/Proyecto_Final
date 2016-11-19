@@ -16,10 +16,15 @@ class Actividad {
     String encabezado;
     int numeroDeJugadas
     int nivelDeDificultad
+    String letras
+    int numeroMaximo;
+    int numeroMinimo;
     String parametros
+    Categoria categoria
+    Juego juego
 
-    static hasMany = [respuestaActividad:RespuestaActividad];
-
+    static hasMany = [respuestaActividad:RespuestaActividad,estudiantes:Estudiante];
+    static belongsTo = Estudiante
 
     static mapping = {
         table "Actividades"
@@ -28,8 +33,14 @@ class Actividad {
     }
 
     static constraints = {
-        nombre blank: false, nullable: false
-        comentarioSobreActividad blank: true, nullable: true
-        encabezado blank: false, nullable: false
+        comentarioSobreActividad nullable: true
+        encabezado nullable: true
+        letras nullable: true
+        parametros nullable: true
+        numeroMaximo nullable: true
+        numeroMinimo nullable: true
+        numeroDeJugadas nullable: true
+        nivelDeDificultad nullable: true
+        categoria nullable: true
     }
 }

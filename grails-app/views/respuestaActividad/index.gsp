@@ -269,7 +269,7 @@
 		<!-- NProgress -->
 		<script src="${resource(dir: 'js', file: 'nprogress.js')}"></script>
 		<!-- iCheck -->
-		<script src="${resource(dir: 'js', file: 'icheck.min.js')}../vendors/iCheck/icheck.min.js"></script>
+		<script src="${resource(dir: 'js', file: 'icheck.min.js')}"></script>
 
 		<!-- Custom Theme Scripts -->
 		<script src="${resource(dir: 'js', file: 'custom.min.js')}"></script>

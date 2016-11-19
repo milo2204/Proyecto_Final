@@ -46,12 +46,18 @@
         #selectable2 .ui-selected { background: #F39814; color: white; }
         #selectable2 { list-style-type: none; margin: 0; padding: 0; width: 450px; }
         #selectable2 li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; border: 1px solid black; border-radius: 10px;  box-shadow: 5px 5px grey;}
-        #parametros {display: none;}
+        #parametros {margin-top:100px;}
         .linea-invisible {  margin-top: 150px; visibility:hidden;}
         .linea-juegos {margin-top: 30px;}
         .container-categorias {display: none;}
         .muestra-container-actividades {display:none;}
         .btn {  float: right;}
+        .grid__item h4{margin-top:-60px;}
+        .grid__item ol{
+            display: inline;
+            list-style-type: none;
+            text-align: center;
+        }
     </style>
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -226,7 +232,7 @@
         <!-- /top navigation -->
 
         <!-- page content -->
-        <g:form>
+        <g:form controller="asignarActividad" action="asignarActividad" method="POST">
         <div class="right_col" role="main">
             <div class="">
                 <div class="page-title">
@@ -258,19 +264,23 @@
                                 <select id="materias">
                                     <option id="none">--Ninguna--</option>
                                     <g:each in="${materias}" var="mat">
-                                        <option value="'${mat.nombreMateria}'">${mat.nombreMateria}</option>
+                                        <option id="${mat.id}" value="'${mat.nombreMateria}'">${mat.nombreMateria}</option>
                                     </g:each>
                                 </select>
 
-                                <label>Grupos:</label>
-                                <select id="grupos">
-                                </select>
+                                <div id="gruposElements">
+                                    <label>Grupos:</label>
+                                    <select id="grupos">
+                                    </select>
+                                </div>
 
-                                <label>Estudiantes:</label>
-                                <select id="estudiantes">
 
-                                </select>
-
+                                <div id="estudiantesElements" class="ui-widget">
+                                    <label for="estudiantes">Estudiantes:</label>
+                                    <input id="estudiantes" size="50"/>
+                                </div>
+                                <label>Fecha Inicio:</label><input type="text" id="fechaInicio"/>
+                                <label>Fecha Fin:</label><input type="text" id="fechaFin"/>
                                 <h1>Juegos</h1>
                                 <hr class="linea-juegos"/>
 
@@ -292,13 +302,19 @@
                                         <ol id="selectable2">
 
                                         </ol>
-                                    </center><br/>
-                                    <div id="parametros">
-                                        <div><label>Numero de Jugadas</label><select id="opcionesJugadas1"></select></div>
-                                        <div></div><label>Numero Minimo</label><select id="opcionesMinimo2"></select></div>
-                                        <div><label>Numero Maximo</label><select id="opcionesMaximo3"></select></div>
-                                    </div>
+                                    </center>
+                                    <button type="button" id="agregarActividad" class="btn btn-primary btn-">Agregar Actividad</button>
+
+                                </div><br/>
+                                <div id="parametros">
+                                    <div id="parametro1" class="parametros"><label>Numero de Jugadas</label><select id="opcionesJugadas1"></select></div><br/>
+                                    <div id="parametro2" class="parametros"><label>Numero Minimo</label><select id="opcionesMinimo2"></select></div><br/>
+                                    <div id="parametro3" class="parametros"><label>Numero Maximo</label><select id="opcionesMaximo3"></select></div><br/>
+                                    <div id="parametro4" class="parametros"><label>Nivel de Dificultad</label><select id="opcionesDificultad4"></select></div><br/>
+                                    <div id="parametro5" class="parametros"><label>Parametros</label><input id="opcionesEscrita5" type="text"/></div>
                                 </div>
+                                <h1>Actividades Temporales</h1>
+                                <hr/>
                                 <div class="container container-categorias">
                                     <br/>
                                     <div class="content">
@@ -308,10 +324,9 @@
                                             <div class="grid__item"><i class="fa fa-fw fa-file-text-o"></i></div>-->
                                         </div>
                                     </div><!-- /content-->
-                                </div><!-- /container -->
-                                <hr/>
-
+                                </div><br/><!-- /container -->
                                 <h1>Actividades Agregadas</h1>
+                                <hr/>
                                 <!--Para mostrar las actividades seleccionadads-->
                                 <div class="container muestra-container-actividades">
                                     <br/>
@@ -324,7 +339,7 @@
                                     </div><!-- /content-->
                                 </div><!-- /container -->
 
-                                <button type="submit" class="btn btn-primary btn-">Guardar</button>
+                                <button id="guardar" type="submit" class="btn btn-primary btn-">Guardar</button>
 
                                 <!--Donde se arrastra las actividades seleccionadads-->
                                 <div id="drop-area" class="drop-area">
@@ -375,45 +390,138 @@
 <script type="text/javascript">
     //Arreglos para actividades agregadas
     var arrayElementos = [];
+    var estudiantesList = [];
+    var estudiantesIds = [];
+
 
     $(document).ready(function (){
-        //Numero de jugadas son 5
-        for(var i =1;i<6;i++){
-            $("#opcionesJugadas").append('<option id="' +i+'" value="'+i+'">'+i+'</option>');
-        }
+        esconderParametros();
+        $("#gruposElements").hide();
+        $("#estudiantesElements").hide();
+
     });
+
+
+    //Cuando se cambie de materia
+    $("#materias").change(function () {
+        var materiaId = $(this).children(":selected").prop("id");
+        jQuery.ajax({
+            url: "${createLink(controller: 'asignarActividad', action: 'obtenerGrupos')}",
+            type: "GET",
+            data: {materiaId: materiaId},
+            success: function (data) {
+                $("#gruposElements").show();
+                $("#grupos").append('<option id="none">--None--</option>');
+                for(var key in data){
+                    $("#grupos").append('<option id="'+data[key].id+'">' +data[key].codigoGrupo+'</option>');
+                }
+
+            }
+
+        });
+
+    });
+
+
+    $("#grupos").change(function(){
+        var grupoId = $(this).children(":selected").prop("id");
+        jQuery.ajax({
+            url: "${createLink(controller: 'asignarActividad', action: 'obtenerEstudiantes')}",
+            type: "GET",
+            data: {grupoId: grupoId},
+            success: function (data) {
+                for(key in data){
+                    //alert("Estudiante:"+ data[key].nombre);
+                    estudiantesList.push(data[key].nombre);
+                    estudiantesIds.push(data[key].id);
+                }
+               $("#estudiantesElements").show();
+                //alert("Lista de estudiantes " + estudiantesList);
+            }
+
+        });
+    });
+
+
+    function split( val ) {
+        return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+        return split( term ).pop();
+    }
+
+    $( "#estudiantes" )
+    // don't navigate away from the field on tab when selecting an item
+            .on( "keydown", function( event ) {
+                if ( event.keyCode === $.ui.keyCode.TAB &&
+                        $( this ).autocomplete( "instance" ).menu.active ) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                            estudiantesList, extractLast( request.term ) ) );
+                },
+                focus: function() {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var terms = split( this.value );
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push( ui.item.value );
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push( "" );
+                    this.value = terms.join( ", " );
+                    return false;
+                }
+            });
+
 
 
     $( function() {
         $( "#selectable" ).selectable();
         $("#selectable2").selectable();
-    } );
+        $( "#fechaInicio" ).datepicker();
+        $("#fechaFin").datepicker();
 
+    } );
 
     $("#selectable .ui-state-default").click(function () {
         var juegoId = $(this).prop("id");
         var juegoNombre = $(this).text();
+        var parametros = [];
         jQuery.ajax({
             url: "${createLink(controller: 'asignarActividad', action: 'obtenerCategorias')}",
             type: "GET",
             data: {juegoId: juegoId},
             success: function (data) {
+                esconderParametros();
+                ///$("#parametros").html(" ");
+
                 //$('#grid .grid__item').remove();
                 $("#selectable2 .ui-state-default").remove();
+                //$("#parametros").css("display","none");
 
-                //Para orginar la data
+                //Para organizar la data
                 data.sort(function(a,b){
                     return a.id - b.id;
                 });
-
                 for(var key in data){
+                    parametros = data[key].parametros;
                     $("#selectable2").append('<li class="ui-state-default " id="' + data[key].id  + '" ><h4>' + data[key].name + '</h4></li>');
                     //$("#grid").append('<div class="grid__item" id="' + data[key].id +'"><h4>' + data[key].name + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>');
                     //$(".drop-area div").append(' <div class="drop-area__item"><div class="dummy"></div></div>');
                     //startDraggables(data[key].id,data[key].nombre);
 
                 }
-                categoriasClick(juegoNombre,juegoId);
+
+                categoriasClick(juegoNombre,juegoId,parametros);
 
                 //$(".container").load("http://localhost:8080/Proyecto_Final/crearUsuario");
                 $(".container-categorias").fadeIn();
@@ -428,18 +536,122 @@
 
     });
 
-    function categoriasClick(juegoNombre,juegoId){
+    function categoriasClick(juegoNombre,juegoId,parametros){
         $("#selectable2 .ui-state-default").click(function () {
+            //$("#parametros").css("display","inline-block");
+
+            for(var key in parametros){
+                $("#parametro"+ parametros[key]).css("display","inline-block");
+
+            }
+
+            if($("#opcionesJugadas1").has("option").length <= 0) {
+                //Numero de jugadas son 5
+                $("#opcionesJugadas1").append('<option id="none1" value="None">--None--</option>');
+                for (var i = 1; i < 6; i++) {
+                    $("#opcionesJugadas1").append('<option id="' + i + '" value="' + i + '">' + i + '</option>');
+                }
+            }
+
+            if(($("#opcionesMinimo2").has("option").length <= 0) && ($("#opcionesMaximo3").has("option").length <= 0)) {
+                $("#opcionesMinimo2").append('<option id="none2" value="None">--None--</option>');
+                $("#opcionesMaximo3").append('<option id="none3" value="None">--None--</option>');
+                for (var i = 1; i < 21; i++) {
+                    $("#opcionesMinimo2").append('<option id="' + i + '" value="' + i + '">' + i + '</option>');
+                    $("#opcionesMaximo3").append('<option id="' + i + '" value="' + i + '">' + i + '</option>');
+
+                }
+            }
+
+
+            if($("#opcionesDificultad4").has("option").length <= 0) {
+
+                $("#opcionesDificultad4").append('<option id=none4" value="None">--None--</option>');
+                for (var i = 1; i < 11; i++) {
+                    $("#opcionesDificultad4").append('<option id="' + i + '" value="' + i + '">' + i + '</option>');
+                }
+            }
+            //Limpiando los select y textbox
+            limpiandoParametros();
+
 
         });
 
     }
 
+    function limpiandoParametros(){
+        $('#opcionesJugadas1').find('option[value="None"]').prop('selected', true);
+        $('#opcionesMinimo2').find('option[value="None"]').prop('selected', true);
+        $('#opcionesMaximo3').find('option[value="None"]').prop('selected', true);
+        $('#opcionesDificultad4').find('option[value="None"]').prop('selected', true);
+        $('#opcionesEscrita5').val("");
+
+    }
+
+    function esconderParametros(){
+        for(var i=1;i<6;i++){
+            $("#parametro"+i).hide();
+        }
+    }
+
+    $("#agregarActividad").click(function() {
+        var juego = $("#selectable .ui-selected").text();
+        var juegoId = $("#selectable .ui-selected").prop("id");
+        var categoria = $("#selectable2 .ui-selected").text();
+        var categoriaId = $("#selectable2 .ui-selected").prop("id");
+        var grupoId = "";
+
+        $("#grupos").change(function() {
+            grupoId = $(this).children(":selected").prop("id");
+        });
+        var param1 = "";
+        var param2 = "";
+        var param3 = "";
+        var param4 = "";
+        var param5 = "";
+
+
+        if ($("#opcionesJugadas1").val() != "None") {
+               param1 = $("#opcionesJugadas1").val();
+        } else {
+            param1 = null;
+        }
+        if ($("#opcionesMinimo2").val() != "None") {
+            param2 = $("#opcionesMinimo2").val();
+        } else {
+            param2 = null;
+        }
+        if ($("#opcionesMaximo3").val() != "None") {
+            param3 = $("#opcionesMaximo3").val();
+        } else {
+            param3 = null;
+        }
+
+        if($("#opcionesDificultad4").val() != "None") {
+            param4 = $("#opcionesDificultad4").val();
+        }else {
+            param4 = null;
+        }
+        //alert($("#opcionesEscrita5").val());
+        if($("#opcionesEscrita5").val() != "") {
+            param5 = $("#opcionesEscrita5").val();
+        } else {
+            param5 = null;
+        }
+
+        //alert(param1 + "" + param2 + "" + param3 + "" + param4 + ""  + param5);
+        //Agredango actividad temporal
+        $("#grid").append('<li class="grid__item" id="' +categoriaId+'"><h4><ol><li class="actividad_juegoId" style="visibility:hidden;">'+juegoId+'</li><li class="actividad_juego">' + juego + "</li><li class='actividad_categoria'>" + categoria + "</li><li id='actividad_param1'>" + (param1 == null ? " " :"# Jugadas: " + param1) + "</li><li id='actividad_param2'>" +
+                (param2 == null ? " " :"# Minimo: " + param2) + "</li><li id='actividad_param3'>" +(param3 == null ? " " : "# Maximo: " + param3) +  "</li><li class='actividades_param4'>" +  (param4 == null ? " " :"# Dificultad: " + param4) +  "</li><li class='actividad_param5'>" +
+                (param5 == null ? " " :"Parametros: " + param5) +'</li><ol></h4><i class="fa fa-fw"></i></div>');
+        startDraggables(juegoId,categoriaId,juego,categoria,grupoId,param1,param2,param3,param4,param5);
+
+    });
+
 
 
     //Para seleccion de materias
-    function startDraggables(id,nombre) {
-
+    function startDraggables(juegoId,categoriaId,juego,categoria,grupoId,param1,param2,param3,param4,param5) {
         var body = document.body,
                 dropArea = document.getElementById( 'drop-area' ),
                 droppableArr = [], dropAreaTimeout;
@@ -457,24 +669,29 @@
                     // ...
 
                     //verificacion de la lista
-                    if (arrayElementos.indexOf(id) == -1) {
+                    if (arrayElementos.indexOf(categoriaId) == -1) {
                         //Para borrar el elemento seleccionado
-                        $("#grid " + "#" + id).remove();
-
+                        $("#grid " + "#" + categoriaId).remove();
                         //Para agregar los elementos a la lista
-                        arrayElementos.push(id);
-                        $("#grid2").append('<div class="grid__item" id="' + id +'"><span class="close" style="margin-top:-63px;margin-left:2px;float:left;">x</span><h4>' + nombre + '</h4><i class="fa fa-fw fa-file-text-o"></i></div>').fadeIn();
+                        arrayElementos.push(categoriaId);
+
+                        $("#grid2").append('<div class="grid__item" id="' + categoriaId +'"><span class="close" style="margin-top:-63px;margin-left:2px;float:left;">x</span><h4><ol><li class="agregada_grupoId" style="visibility: hidden">'+grupoId+'</li><li class="agregada_juegoId">'+juegoId+'</li><li class="agregada_juego">' + juego + "</li><li id="+categoriaId+" class='agregada_categoria'>" + categoria + "</li><li class='agregada_param1'>" + (param1 == null ? " " :"# Jugadas: " + param1) + "</li><li class='agregada_param2'>" +
+                                (param2 == null ? " " :"# Minimo: " + param2) + "</li><li class='agregada_param3'>" +(param3 == null ? " " : "# Maximo: " + param3) +  "</li><li class='agregada_param4'>" +  (param4 == null ? " " :"# Dificultad: " + param4) +  "</li><li class='agregada_param5'>" +
+                                (param5 == null ? " " :"Parametros: " + param5) +'</li><ol></h4><i class="fa fa-fw "></i></div>').fadeIn();
                         $(".muestra-container-actividades").fadeIn();
+
                     }
 
                     //Boton cerrar para cada actividad agregada
                     $( ".close").click(function (){
                         var closeId = $(this).parent().prop("id");
+                        //alert(closeId);
                         //alert("Cantidad elementos " + arrayElementos.length);
-                        //alert("Esta dentro del arreglo " + arrayElementos.indexOf(parseInt(closeId)));
-                        if(arrayElementos.indexOf(parseInt(closeId)) >= 0){
+                        //alert("Esta dentro del arreglo " + arrayElementos.indexOf(closeId));
+                        //alert(arrayElementos);
+                        if(arrayElementos.indexOf(closeId) >= 0){
                             //alert(arrayElementos);
-                            var removed = arrayElementos.splice(arrayElementos.indexOf(parseInt(closeId)),1);
+                            var removed = arrayElementos.splice(arrayElementos.indexOf(closeId),1);
                             $("#grid2 " + "#" + closeId).remove();
                         }
                         //alert("Cantidad elementos despues" + arrayElementos.length);
@@ -488,6 +705,7 @@
                 }
             } ) );
         } );
+
 
         // initialize draggable(s)
         [].slice.call(document.querySelectorAll( '#grid .grid__item' )).forEach( function( el ) {
@@ -526,6 +744,120 @@
         } );
 
     }
+
+    $("#guardar").click(function (){
+        var juegoIds = [];
+        var estudianteIds = [];
+        var categoriaIds = [];
+        var materiasId = "";
+        var grupoIds = "";
+        var parametros = [];
+        var valoresParametros = [];
+        //alert($("#estudiantes").val());
+        $(".agregada_juegoId").each(function() {
+            //alert($(this).html());
+            juegoIds.push($(this).html());
+            //alert(juegoIds);
+        });
+
+        $(".agregada_categoria").each(function (){
+           categoriaIds.push($(this).prop("id"));
+        });
+
+
+        //alert("Lista Catrogiras " + categoriaIds);
+        var estudianteComas = [];
+        if($("#estudiantes").val() != null || $("#estudiantes").val() != "" || $("#estudiantes").val() != undefined){
+            estudianteComas = $("#estudiantes").val().split(", ");
+        }
+        //alert("Lista de estudiantes " + estudianteComas );
+        for(var key in estudianteComas) {
+            //alert("Valor de estudiantes " + estudianteComas[key]);
+            //alert(estudiantesList.indexOf(estudianteComas[key]));
+            if (estudiantesList.indexOf(estudianteComas[key]) >= 0){
+                estudianteIds.push(estudiantesIds[estudianteComas.indexOf(estudianteComas[key])]);
+                //alert(estudianteIds);
+            }
+        }
+
+        materiasId = $("#materias").children(":selected").prop("id");
+
+
+        grupoIds =  $("#grupos").children(":selected").prop("id");
+
+        var count = 0;
+        $("#grid2 .grid__item").each(function() {
+            var p = [];
+            var valores = [];
+            var param1 = $(this).find(".agregada_param1").text().split(/#[\s]+[\w]+:[\s]+/g)[1];
+            var param2 = $(this).find(".agregada_param2").text().split(/#[\s]+[\w]+:[\s]+/g)[1];
+            var param3 = $(this).find(".agregada_param3").text().split(/#[\s]+[\w]+:[\s]+/g)[1];
+            var param4 = $(this).find(".agregada_param4").text().split(/#[\s]+[\w]+:[\s]+/g)[1];
+            var param5 = $(this).find(".agregada_param5").text().split(/[\w]+:[\s]+/g)[1];
+            //alert( typeof param1 + '' + typeof param2 + '' + typeof param3 + '' + typeof param4 + '' + typeof param5);
+            //alert(param1.val() + '' + param2.val() + '' + param3.val() + '' + param4.val() + '' + param5.val());
+
+            if(param1 != null ){
+                p.push(1);
+                valores.push(param1);
+                //alert("adentro1");
+            }
+
+            if(param2 != null){
+                p.push(2);
+                valores.push(param2);
+
+                //alert("adentro2");
+
+            }
+            if(param3 != null ){
+                p.push(3);
+                valores.push(param3);
+
+                //alert("adentro3");
+
+            }
+            if(param4 != null ){
+                p.push(4);
+                valores.push(param4);
+
+                //alert("adentro4");
+
+            }
+            if(param5 != null ){
+                p.push(5);
+                valores.push(param5);
+
+                //alert("adentro5");
+
+            }
+            //alert("Parametros " +p);
+            alert(valores);
+            parametros.push(p);
+            valoresParametros.push(valores);
+            //console.log(parametros);
+            console.log(valoresParametros);
+            p = [];
+            valores = [];
+            count++;
+
+        });
+
+        //alert("Valores " + valoresParametros);
+
+        jQuery.ajax({
+            url: "${createLink(controller: 'asignarActividad', action: 'guardarActividad')}",
+            type: "POST",
+            traditional: true,
+            data: {juegosId: juegoIds,estudiantesId:estudianteIds,categoriaIds:categoriaIds,materiasId:materiasId,gruposId:grupoIds,parametros:parametros,valoresParamatros:valoresParametros},
+            success: function (data) {
+
+
+            }
+
+        });
+
+    });
 
     //Para los draggables de activad.
     (function() {

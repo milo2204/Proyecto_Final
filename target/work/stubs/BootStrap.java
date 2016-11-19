@@ -14,6 +14,10 @@ public  void setMetaClass(groovy.lang.MetaClass mc) { }
 public  java.lang.Object invokeMethod(java.lang.String method, java.lang.Object arguments) { return null;}
 public  java.lang.Object getProperty(java.lang.String property) { return null;}
 public  void setProperty(java.lang.String property, java.lang.Object value) { }
+public  java.lang.Object getCategoriaService() { return null;}
+public  void setCategoriaService(java.lang.Object value) { }
+public  java.lang.Object getBcryptService() { return null;}
+public  void setBcryptService(java.lang.Object value) { }
 public  java.lang.Object getInit() { return null;}
 public  void setInit(java.lang.Object value) { }
 public  java.lang.Object getDestroy() { return null;}

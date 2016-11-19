@@ -1,10 +1,13 @@
 import org.grails.datastore.mapping.query.Query
 import proyecto_final.Actividad
 import proyecto_final.Categoria
+import proyecto_final.Estudiante
+import proyecto_final.EstudiantesActividades
 import proyecto_final.Grupo
 import proyecto_final.Juego
 import WebService.RespuestaActividad
 import proyecto_final.Materia
+import proyecto_final.Profesor
 import proyecto_final.RegistroRespuestaAct
 import proyecto_final.Role
 import proyecto_final.User
@@ -13,7 +16,7 @@ import proyecto_final.UserRole
 class BootStrap {
 
     def categoriaService;
-
+    def bcryptService;
 
     def init = { servletContext ->
 
@@ -41,14 +44,17 @@ class BootStrap {
             roleAdmin.save(flush: true, failOnError: true)
         }
 
+        Date fechN = new Date();
+
         def adminUser = new User()
         adminUser.username = "admin"
-        adminUser.password = "admin"
+        adminUser.password = bcryptService.hashPassword("admin")
         adminUser.email = "admin@admin.com"
         adminUser.nombre = "admin"
         adminUser.apellido = "admin"
         adminUser.telefono = "809-226-9851"
-
+        adminUser.password
+        adminUser.fechaNacimiento = fechN;
         adminUser.save(flush: true, failOnError: true)
 
         try {
@@ -172,6 +178,39 @@ class BootStrap {
         vocabulario.addToCategorias(vegetalesCat)
         vocabulario.save(flush: true, failOnError: true)
 
+        Profesor pro = new Profesor()
+        pro.nombre = "Profesor"
+        pro.apellido = "Profesor"
+        pro.telefono = "8092262037"
+        pro.email ="pro@pro.com"
+        pro.username = "milo"
+        pro.password ="1234"
+        pro.fechaNacimiento = newDate
+        pro.save(flush: true,failOnError: true)
+
+        Estudiante estu = new Estudiante()
+        estu.nombre = "Prueba"
+        estu.apellido = "Prueba"
+        estu.edad = 24
+        estu.codigoEstudiate = "20102302"
+        estu.telefono = "8092262037"
+        estu.email ="milo2204@gmail.com"
+        estu.username = "milo2204"
+        estu.password ="1234"
+        estu.fechaNacimiento = newDate
+        estu.save(flush: true,failOnError: true)
+
+        Estudiante estu1 = new Estudiante()
+        estu1.nombre = "Prueba 2"
+        estu1.apellido = "Prueba"
+        estu1.edad = 24
+        estu1.codigoEstudiate = "20102302"
+        estu1.telefono = "8092262037"
+        estu1.email ="milo220434@gmail.com"
+        estu1.username = "milo2204678"
+        estu1.password ="1234"
+        estu1.fechaNacimiento = newDate
+        estu1.save(flush: true,failOnError: true)
 
         Materia materia = new Materia();
         materia.nombreMateria = "Matematica";
@@ -180,13 +219,54 @@ class BootStrap {
 
         Grupo grupo = new Grupo()
         grupo.materia = materia
-        grupo.nombreGrupo = "MAT-001"
         grupo.codigoGrupo = "GRP001"
+        grupo.addToEstudiantes(estu);
+        grupo.addToEstudiantes(estu1);
         grupo.save(flush: true,failOnError: true)
 
+        //pro.addToMaterias(materia)
+        //pro.save(flush: true,failOnError: true)
 
+        Actividad act = new Actividad()
+        act.juego = aritmetica
+        act.nombre = aritmetica.nombre
+        act.categoria = sumar
+        act.save(flush: true,failOnError: true)
+
+        Actividad a = new Actividad()
+        a.juego = trazar
+        a.nombre = trazar.nombre
+        a.categoria = numerosTrazarCat
+        a.save(flush: true,failOnError: true)
+
+        Actividad b = new Actividad()
+        b.juego = trazar
+        b.nombre = memorizar.nombre
+        b.categoria = numerosMemorizarCat
+        b.save(flush: true,failOnError: true)
         //RegistroRespuestaAct.create(actividad,respuesta);
+
+
+        //act.addToEstudiantes(estu)
+        act.addToEstudiantes(estu1)
+        b.addToEstudiantes(estu)
+        act.save(flush: true,failOnError: true)
+        b.save(flush: true, failOnError: true)
         println("Se creo...")
+
+        EstudiantesActividades ea = new EstudiantesActividades()
+        ea.estudiante = estu
+        ea.actividad = a;
+
+        EstudiantesActividades e = new EstudiantesActividades()
+        e.actividad = a;
+        e.estudiante = estu1
+        e.save(flush:true,failOnError: true)
+
+
+        ea.save(flush: true,failOnError: true)
+
+
 
     }
 

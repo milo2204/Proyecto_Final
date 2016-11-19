@@ -12,7 +12,7 @@ import groovy.util.*;
     java.io.Serializable,    groovy.lang.GroovyObject {
 ;
 public User
-(java.lang.String username, java.lang.String password) {
+(java.lang.String username, java.lang.String password, java.lang.String email, java.lang.String nombre, java.lang.String apellido, java.lang.String telefono, java.util.Date fechaNacimiento, java.lang.String verificarContrasena) {
 super ();
 }
 public  groovy.lang.MetaClass getMetaClass() { return (groovy.lang.MetaClass)null;}
@@ -26,6 +26,16 @@ public  java.lang.String getUsername() { return (java.lang.String)null;}
 public  void setUsername(java.lang.String value) { }
 public  java.lang.String getPassword() { return (java.lang.String)null;}
 public  void setPassword(java.lang.String value) { }
+public  java.lang.String getEmail() { return (java.lang.String)null;}
+public  void setEmail(java.lang.String value) { }
+public  java.lang.String getNombre() { return (java.lang.String)null;}
+public  void setNombre(java.lang.String value) { }
+public  java.lang.String getApellido() { return (java.lang.String)null;}
+public  void setApellido(java.lang.String value) { }
+public  java.lang.String getTelefono() { return (java.lang.String)null;}
+public  void setTelefono(java.lang.String value) { }
+public  java.util.Date getFechaNacimiento() { return (java.util.Date)null;}
+public  void setFechaNacimiento(java.util.Date value) { }
 public  boolean getEnabled() { return false;}
 public  boolean isEnabled() { return false;}
 public  void setEnabled(boolean value) { }

@@ -22,10 +22,8 @@ public  java.lang.String getNombre() { return (java.lang.String)null;}
 public  void setNombre(java.lang.String value) { }
 public  java.util.Date getDate() { return (java.util.Date)null;}
 public  void setDate(java.util.Date value) { }
-public  proyecto_final.Actividad getActividad() { return (proyecto_final.Actividad)null;}
-public  void setActividad(proyecto_final.Actividad value) { }
-public static  java.lang.Object getHasOne() { return null;}
-public static  void setHasOne(java.lang.Object value) { }
+public static  java.lang.Object getHasMany() { return null;}
+public static  void setHasMany(java.lang.Object value) { }
 public static  java.lang.Object getMapping() { return null;}
 public static  void setMapping(java.lang.Object value) { }
 }

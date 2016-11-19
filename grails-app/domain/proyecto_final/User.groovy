@@ -17,14 +17,14 @@ class User implements Serializable {
 	String nombre
 	String apellido
 	String telefono
-	boolean esAdmin
+	Date fechaNacimiento
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
 
 
-	User(String username, String password, String email, String nombre, String apellido, String telefono, String verificarContrasena, boolean esAdmin) {
+	User(String username, String password, String email, String nombre, String apellido, String telefono, Date fechaNacimiento ,String verificarContrasena) {
 		this()
 		this.username = username
 		this.password = password
@@ -32,7 +32,7 @@ class User implements Serializable {
 		this.nombre = nombre
 		this.apellido = apellido
 		this.telefono = telefono
-		this.esAdmin = esAdmin
+		this.fechaNacimiento = fechaNacimiento
 
 	}
 
@@ -67,6 +67,6 @@ class User implements Serializable {
 	}
 
 	static mapping = {
-		password column: '`password`'
+		password column: 'password'
 	}
 }
