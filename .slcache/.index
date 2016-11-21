@@ -10601,3 +10601,4 @@ n:1899:grails/util/PluginBuildSettings$getSupportedPluginInfos$13
 n:1900:grails/util/PluginBuildSettings$getPluginSourceDirectories$14
 n:2726:BuildConfig$_run_closure1$_closure5
 n:2071:com/sun/tools/javac/comp/Check$3
+n:7322:grails/web/JSONBuilder

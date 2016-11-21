@@ -101,7 +101,7 @@ class EstudianteService {
             def act = Actividad.get(actList.get(i).getId())
             for(id in estudianteIds){
                 def est = Estudiante.get(id)
-                EstudiantesActividades ea = new EstudiantesActividades()
+                RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
                 ea.estudiante = est
                 ea.actividad = act
                 ea.save(flush: true,failOnError: true)

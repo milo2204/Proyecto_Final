@@ -8,6 +8,7 @@ import proyecto_final.Juego
 import WebService.RespuestaActividad
 import proyecto_final.Materia
 import proyecto_final.Profesor
+import proyecto_final.RegistroEstudiantesActividades
 import proyecto_final.RegistroRespuestaAct
 import proyecto_final.Role
 import proyecto_final.User
@@ -254,19 +255,18 @@ class BootStrap {
         b.save(flush: true, failOnError: true)
         println("Se creo...")
 
-        EstudiantesActividades ea = new EstudiantesActividades()
+        RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
         ea.estudiante = estu
         ea.actividad = a;
+        ea.save(flush: true, failOnError: true)
 
-        EstudiantesActividades e = new EstudiantesActividades()
+        RegistroEstudiantesActividades e = new RegistroEstudiantesActividades()
         e.actividad = a;
         e.estudiante = estu1
         e.save(flush:true,failOnError: true)
 
-
-        ea.save(flush: true,failOnError: true)
-
-
+        def eActividades = RegistroEstudiantesActividades.findAllByActividad(a)
+        println("El tamaño de la lista " + eActividades.size())
 
     }
 
