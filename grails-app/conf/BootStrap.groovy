@@ -1,3 +1,4 @@
+import org.apache.catalina.core.ApplicationContext
 import org.grails.datastore.mapping.query.Query
 import proyecto_final.Actividad
 import proyecto_final.Categoria
@@ -13,6 +14,10 @@ import proyecto_final.RegistroRespuestaAct
 import proyecto_final.Role
 import proyecto_final.User
 import proyecto_final.UserRole
+import weka.clusterers.Cobweb
+import weka.core.Instance
+import weka.core.Instances
+import weka.core.converters.ArffLoader
 
 import java.time.LocalDate
 
@@ -37,7 +42,7 @@ class BootStrap {
             roleProfesor.authority = "PROFESOR"
             roleProfesor.save(flush: true, failOnError: true)
         }
-        if (!Role.exists(Role.findByAuthority("ESTUDIANTE"))){
+        if (!Role.exists(Role.findByAuthority("ESTUDIANTE"))) {
             roleEstudiante.authority = "ESTUDIANTE"
             roleEstudiante.save(flush: true, failOnError: true)
         }
@@ -62,7 +67,7 @@ class BootStrap {
 
         try {
             UserRole.create(adminUser, roleAdmin)
-        }catch (Exception e){
+        } catch (Exception e) {
             print(e.getMessage())
         }
 
@@ -89,67 +94,67 @@ class BootStrap {
         //vocabulario.save(flush: true)
 
         //Categorias para Aritmetica
-        ArrayList<Integer> parametrosSumarRestar = new Arrays.ArrayList<Integer>(Arrays.asList(1,2,3))
+        ArrayList<Integer> parametrosSumarRestar = new Arrays.ArrayList<Integer>(Arrays.asList(1, 2, 3))
 
 
-        Categoria sumar =  categoriaService.crearCategoria("Sumar",parametrosSumarRestar)
+        Categoria sumar = categoriaService.crearCategoria("Sumar", parametrosSumarRestar)
         sumar.save(flush: true)
 
-        Categoria resta = categoriaService.crearCategoria("Restar",parametrosSumarRestar)
+        Categoria resta = categoriaService.crearCategoria("Restar", parametrosSumarRestar)
         resta.save(flush: true)
 
-        Categoria sumaResta = categoriaService.crearCategoria("Sumar y Restar",parametrosSumarRestar)
+        Categoria sumaResta = categoriaService.crearCategoria("Sumar y Restar", parametrosSumarRestar)
         sumaResta.save(flush: true)
         //Fin de cateorias
 
         //Categorias para memorizar
-        ArrayList<Integer> parametrosMemorizar = new ArrayList<>(Arrays.asList(1,4))
+        ArrayList<Integer> parametrosMemorizar = new ArrayList<>(Arrays.asList(1, 4))
 
-        Categoria numerosMemorizarCat = categoriaService.crearCategoria("Numeros",parametrosMemorizar)
+        Categoria numerosMemorizarCat = categoriaService.crearCategoria("Numeros", parametrosMemorizar)
         numerosMemorizarCat.save(flush: true)
 
-        Categoria letrasMemorizarCat = categoriaService.crearCategoria("Letras",parametrosMemorizar)
+        Categoria letrasMemorizarCat = categoriaService.crearCategoria("Letras", parametrosMemorizar)
         letrasMemorizarCat.save(flush: true)
 
-        Categoria figurasMemorizarCat = categoriaService.crearCategoria("Figuras",parametrosMemorizar)
+        Categoria figurasMemorizarCat = categoriaService.crearCategoria("Figuras", parametrosMemorizar)
         figurasMemorizarCat.save(flush: true)
 
-        Categoria imagenesCat = categoriaService.crearCategoria("Imagenes",parametrosMemorizar)
+        Categoria imagenesCat = categoriaService.crearCategoria("Imagenes", parametrosMemorizar)
         imagenesCat.save(flush: true)
         //Fin de categorias
 
         //Categorias para trazar
-        ArrayList<Integer> parametrosTrazar = new ArrayList<Integer>(Arrays.asList(1,5))
+        ArrayList<Integer> parametrosTrazar = new ArrayList<Integer>(Arrays.asList(1, 5))
 
-        Categoria numerosTrazarCat = categoriaService.crearCategoria("Numeros",parametrosTrazar)
+        Categoria numerosTrazarCat = categoriaService.crearCategoria("Numeros", parametrosTrazar)
         numerosTrazarCat.save(flush: true)
 
-        Categoria letrasTrazarCat = categoriaService.crearCategoria("Letras",parametrosTrazar)
+        Categoria letrasTrazarCat = categoriaService.crearCategoria("Letras", parametrosTrazar)
         letrasTrazarCat.save(flush: true)
 
-        Categoria figurasTrazarCat = categoriaService.crearCategoria("Figuras",parametrosTrazar)
+        Categoria figurasTrazarCat = categoriaService.crearCategoria("Figuras", parametrosTrazar)
         figurasTrazarCat.save(flush: true)
         //Fin categorias
 
         //Categorias para Vocabulario
-        ArrayList<Integer> parametrosVocabulario = new ArrayList<>(Arrays.asList(1,4))
+        ArrayList<Integer> parametrosVocabulario = new ArrayList<>(Arrays.asList(1, 4))
 
-        Categoria coloresCat = categoriaService.crearCategoria("Colores",parametrosVocabulario)
+        Categoria coloresCat = categoriaService.crearCategoria("Colores", parametrosVocabulario)
         coloresCat.save(flush: true)
 
-        Categoria numerosVocabularioCat = categoriaService.crearCategoria("Numeros",parametrosVocabulario)
+        Categoria numerosVocabularioCat = categoriaService.crearCategoria("Numeros", parametrosVocabulario)
         numerosVocabularioCat.save(flush: true)
 
-        Categoria vehiculosCat = categoriaService.crearCategoria("Vehiculos",parametrosVocabulario)
+        Categoria vehiculosCat = categoriaService.crearCategoria("Vehiculos", parametrosVocabulario)
         vehiculosCat.save(flush: true)
 
-        Categoria animalesCat = categoriaService.crearCategoria("Animales",parametrosVocabulario)
+        Categoria animalesCat = categoriaService.crearCategoria("Animales", parametrosVocabulario)
         animalesCat.save(flush: true)
 
-        Categoria frutasCat = categoriaService.crearCategoria("Frutas",parametrosVocabulario)
+        Categoria frutasCat = categoriaService.crearCategoria("Frutas", parametrosVocabulario)
         frutasCat.save(flush: true)
 
-        Categoria vegetalesCat = categoriaService.crearCategoria("Vegetales",parametrosVocabulario)
+        Categoria vegetalesCat = categoriaService.crearCategoria("Vegetales", parametrosVocabulario)
         vegetalesCat.save(flush: true)
         //fin de categorias
 
@@ -164,7 +169,7 @@ class BootStrap {
         memorizar.addToCategorias(letrasMemorizarCat)
         memorizar.addToCategorias(figurasMemorizarCat)
         memorizar.addToCategorias(imagenesCat)
-        memorizar.save(flush: true,failOnError: true)
+        memorizar.save(flush: true, failOnError: true)
 
         //Agregando cateogiras a trazar
         trazar.addToCategorias(numerosTrazarCat)
@@ -185,11 +190,11 @@ class BootStrap {
         pro.nombre = "Profesor"
         pro.apellido = "Profesor"
         pro.telefono = "8092262037"
-        pro.email ="pro@pro.com"
+        pro.email = "pro@pro.com"
         pro.username = "milo"
-        pro.password ="1234"
+        pro.password = "1234"
         pro.fechaNacimiento = newDate
-        pro.save(flush: true,failOnError: true)
+        pro.save(flush: true, failOnError: true)
 
         Estudiante estu = new Estudiante()
         estu.nombre = "Prueba"
@@ -197,11 +202,11 @@ class BootStrap {
         estu.edad = 24
         estu.codigoEstudiate = "20102302"
         estu.telefono = "8092262037"
-        estu.email ="milo2204@gmail.com"
+        estu.email = "milo2204@gmail.com"
         estu.username = "milo2204"
-        estu.password ="1234"
+        estu.password = "1234"
         estu.fechaNacimiento = newDate
-        estu.save(flush: true,failOnError: true)
+        estu.save(flush: true, failOnError: true)
 
         Estudiante estu1 = new Estudiante()
         estu1.nombre = "Prueba 2"
@@ -209,29 +214,29 @@ class BootStrap {
         estu1.edad = 24
         estu1.codigoEstudiate = "20102302"
         estu1.telefono = "8092262037"
-        estu1.email ="milo220434@gmail.com"
+        estu1.email = "milo220434@gmail.com"
         estu1.username = "milo2204678"
-        estu1.password ="1234"
+        estu1.password = "1234"
         estu1.fechaNacimiento = newDate
-        estu1.save(flush: true,failOnError: true)
+        estu1.save(flush: true, failOnError: true)
 
         Materia materia = new Materia();
         materia.nombreMateria = "Matematica";
         materia.codigoMateria = "MATOO1"
-        materia.save(flush: true,failOnError: true)
+        materia.save(flush: true, failOnError: true)
 
         Grupo grupo = new Grupo()
         grupo.materia = materia
         grupo.codigoGrupo = "GRP001"
         grupo.addToEstudiantes(estu);
         grupo.addToEstudiantes(estu1);
-        grupo.save(flush: true,failOnError: true)
+        grupo.save(flush: true, failOnError: true)
 
         //pro.addToMaterias(materia)
         //pro.save(flush: true,failOnError: true)
 
         Date newDate1 = new Date().clearTime()
-        newDate1.set(year: 2016,month:11,date: 26)
+        newDate1.set(year: 2016, month: 11, date: 26)
         print newDate.date - newDate1.date
 
         Actividad act = new Actividad()
@@ -240,7 +245,7 @@ class BootStrap {
         act.categoria = sumar
         act.fechaInicio = newDate
         act.fechaFin = newDate1
-        act.save(flush: true,failOnError: true)
+        act.save(flush: true, failOnError: true)
 
         Actividad a = new Actividad()
         a.juego = trazar
@@ -248,7 +253,7 @@ class BootStrap {
         a.categoria = numerosTrazarCat
         a.fechaInicio = newDate
         a.fechaFin = newDate1
-        a.save(flush: true,failOnError: true)
+        a.save(flush: true, failOnError: true)
 
         Actividad b = new Actividad()
         b.juego = trazar
@@ -256,9 +261,8 @@ class BootStrap {
         b.categoria = numerosMemorizarCat
         b.fechaInicio = newDate
         b.fechaFin = newDate1
-        b.save(flush: true,failOnError: true)
+        b.save(flush: true, failOnError: true)
         //RegistroRespuestaAct.create(actividad,respuesta);
-
 
 
         RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
@@ -267,8 +271,8 @@ class BootStrap {
         estu.addToRegistroEstudianteActividades(ea)
         a.addToRegistroEstAct(ea)
 
-        estu.save(flush: true,failOnError: true)
-        a.save(flush: true,failOnError: true)
+        estu.save(flush: true, failOnError: true)
+        a.save(flush: true, failOnError: true)
         ea.save(flush: true, failOnError: true)
 
         RegistroEstudiantesActividades e = new RegistroEstudiantesActividades()
@@ -277,9 +281,9 @@ class BootStrap {
         estu.addToRegistroEstudianteActividades(e)
         act.addToRegistroEstAct(e);
 
-        estu.save(flush: true,failOnError: true)
-        act.save(flush: true,failOnError: true)
-        e.save(flush:true,failOnError: true)
+        estu.save(flush: true, failOnError: true)
+        act.save(flush: true, failOnError: true)
+        e.save(flush: true, failOnError: true)
 
         def eActividades = RegistroEstudiantesActividades.findAllByEstudiante(estu)
         println("El tamaño de la lista " + eActividades.size())
@@ -288,13 +292,40 @@ class BootStrap {
 
         RespuestaActividad resp = new RespuestaActividad()
         resp.actividad = act
-        resp.save(flush: true,failOnError: true)
+        resp.save(flush: true, failOnError: true)
 
         RespuestaActividad r = new RespuestaActividad()
         r.actividad = act
-        r.save(flush: true,failOnError: true)
+        r.save(flush: true, failOnError: true)
 
+        //Instances data = new Instances(new BufferedReader(new FileReader("/Users/Mikey/IdeaProjects/Proyecto_Final/web-app/datasets/bank-data.arff")))
 
+        //Cobweb
+        /*ArffLoader loader = new ArffLoader()
+        loader.file = new File("/Users/Mikey/IdeaProjects/Proyecto_Final/web-app/datasets/bank-data.arff")
+        Instances data = loader.structure
+
+        // train Cobweb
+        Cobweb model = new Cobweb()
+        model.buildClusterer(data)
+        Instance current
+        while ((current = loader.getNextInstance(data)))
+            model.updateClusterer(current)
+        model.updateFinished()
+        println model*/
+
+        ArffLoader loader = new ArffLoader();
+        loader.setFile(new File("/Users/Mikey/IdeaProjects/Proyecto_Final/web-app/datasets/bank-data.arff"));
+        Instances structure = loader.getStructure();
+        // train Cobweb
+        Cobweb cw = new Cobweb();
+        cw.buildClusterer(structure);
+        Instance current;
+        while ((current = loader.getNextInstance(structure)) != null) {
+            cw.updateClusterer(current)
+        }
+        cw.updateFinished()
+        println cw
 
     }
 
