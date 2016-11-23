@@ -14,6 +14,8 @@ import proyecto_final.Role
 import proyecto_final.User
 import proyecto_final.UserRole
 
+import java.time.LocalDate
+
 class BootStrap {
 
     def categoriaService;
@@ -228,45 +230,71 @@ class BootStrap {
         //pro.addToMaterias(materia)
         //pro.save(flush: true,failOnError: true)
 
+        Date newDate1 = new Date().clearTime()
+        newDate1.set(year: 2016,month:11,date: 26)
+        print newDate.date - newDate1.date
+
         Actividad act = new Actividad()
         act.juego = aritmetica
         act.nombre = aritmetica.nombre
         act.categoria = sumar
+        act.fechaInicio = newDate
+        act.fechaFin = newDate1
         act.save(flush: true,failOnError: true)
 
         Actividad a = new Actividad()
         a.juego = trazar
         a.nombre = trazar.nombre
         a.categoria = numerosTrazarCat
+        a.fechaInicio = newDate
+        a.fechaFin = newDate1
         a.save(flush: true,failOnError: true)
 
         Actividad b = new Actividad()
         b.juego = trazar
         b.nombre = memorizar.nombre
         b.categoria = numerosMemorizarCat
+        b.fechaInicio = newDate
+        b.fechaFin = newDate1
         b.save(flush: true,failOnError: true)
         //RegistroRespuestaAct.create(actividad,respuesta);
 
 
-        //act.addToEstudiantes(estu)
-        act.addToEstudiantes(estu1)
-        b.addToEstudiantes(estu)
-        act.save(flush: true,failOnError: true)
-        b.save(flush: true, failOnError: true)
-        println("Se creo...")
 
         RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
         ea.estudiante = estu
         ea.actividad = a;
+        estu.addToRegistroEstudianteActividades(ea)
+        a.addToRegistroEstAct(ea)
+
+        estu.save(flush: true,failOnError: true)
+        a.save(flush: true,failOnError: true)
         ea.save(flush: true, failOnError: true)
 
         RegistroEstudiantesActividades e = new RegistroEstudiantesActividades()
-        e.actividad = a;
-        e.estudiante = estu1
+        e.actividad = act;
+        e.estudiante = estu
+        estu.addToRegistroEstudianteActividades(e)
+        act.addToRegistroEstAct(e);
+
+        estu.save(flush: true,failOnError: true)
+        act.save(flush: true,failOnError: true)
         e.save(flush:true,failOnError: true)
 
-        def eActividades = RegistroEstudiantesActividades.findAllByActividad(a)
+        def eActividades = RegistroEstudiantesActividades.findAllByEstudiante(estu)
         println("El tamaño de la lista " + eActividades.size())
+
+
+
+        RespuestaActividad resp = new RespuestaActividad()
+        resp.actividad = act
+        resp.save(flush: true,failOnError: true)
+
+        RespuestaActividad r = new RespuestaActividad()
+        r.actividad = act
+        r.save(flush: true,failOnError: true)
+
+
 
     }
 

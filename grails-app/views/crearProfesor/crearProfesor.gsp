@@ -163,7 +163,7 @@
                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
                                         <span class="right" aria-hidden="true"></span>
 
-                                        <h4><label>Fecha Nacimiento: </label></h4><g:datePicker precision="day" value="${profesor?.fechaNacimiento}" name="fechaNacimiento" type="da" class="form-control has-feedback-left" id="fechaNacimiento"/>
+                                        <h4><label>Fecha Nacimiento: </label></h4><g:datePicker precision="day" value="${profesor?.fechaNacimiento}" name="fechaNacimiento"  class="form-control has-feedback-left" id="fechaNacimiento"/>
                                     </div>
 
                                     <div class="col-md-6 col-sm-6 col-xs-12 ">

@@ -22,9 +22,12 @@ class Actividad {
     String parametros
     Categoria categoria
     Juego juego
+    Date fechaInicio;
+    Date fechaFin;
+    Date fechaCreada;
 
-    static hasMany = [respuestaActividad:RespuestaActividad,estudiantes:Estudiante];
     static belongsTo = Estudiante
+    static hasMany = [respuestaActividad:RespuestaActividad,registroEstAct:RegistroEstudiantesActividades];
 
     static mapping = {
         table "Actividades"
@@ -42,5 +45,9 @@ class Actividad {
         numeroDeJugadas nullable: true
         nivelDeDificultad nullable: true
         categoria nullable: true
+        fechaCreada nullable: true
+        fechaFin nullable: true
+        fechaInicio nullable: true
+        registroEstAct nullable: true
     }
 }

@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crear Actividad</title>
 
+    <%--<link href="${resource(dir: 'css', file: 'jquery-ui.min.css')}" rel="stylesheet">--%>
     <!-- Bootstrap -->
     <link href="${resource(dir: 'css', file: 'bootstrap.min.css')}" rel="stylesheet">
     <!-- NProgress -->
@@ -57,6 +58,76 @@
             display: inline;
             list-style-type: none;
             text-align: center;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @-webkit-keyframes animatetop {
+            from {top:-300px; opacity:0}
+            to {top:0; opacity:1}
+        }
+
+        @keyframes animatetop {
+            from {top:-300px; opacity:0}
+            to {top:0; opacity:1}
+        }
+
+        /* The Close Button */
+        .closeModal {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .closeModal:hover,
+        .closeModal:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .modal-body {padding: 2px 16px;}
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
         }
     </style>
     <script type="text/javascript">
@@ -278,9 +349,11 @@
                                 <div id="estudiantesElements" class="ui-widget">
                                     <label for="estudiantes">Estudiantes:</label>
                                     <input id="estudiantes" size="50"/>
+
                                 </div>
-                                <label>Fecha Inicio:</label><input type="text" id="fechaInicio"/>
-                                <label>Fecha Fin:</label><input type="text" id="fechaFin"/>
+
+                                <label>Fecha Inicio:</label><g:datePicker precision="day"  name="fechaInicio"  id="fechaInicio" />
+                                <label>Fecha Fin:</label><g:datePicker precision="day" name="fechaFin"  id="fechaFin"/>
                                 <h1>Juegos</h1>
                                 <hr class="linea-juegos"/>
 
@@ -357,6 +430,7 @@
             </div>
         </div>
         </g:form>
+
     </div>
 
 
@@ -372,9 +446,13 @@
     <!-- /footer content -->
 </div>
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!--<script src="${resource(dir: 'js',file: 'jquery.min.js')}"></script>-->
+<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+<!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+<script src="${resource(dir:'js',file:'jquery.js')}"></script>
+
+<script src="${resource(dir:'js',file:'jquery-ui.js')}"></script>
+
+<%--<script src="${resource(dir: 'js',file: 'jquery.min.js')}"></script>--%>
 <!-- Bootstrap -->
 <script src="${resource(dir: 'js', file: 'bootstrap.min.js')}"></script>
 <!-- FastClick -->
@@ -393,11 +471,11 @@
     var estudiantesList = [];
     var estudiantesIds = [];
 
-
     $(document).ready(function (){
         esconderParametros();
         $("#gruposElements").hide();
         $("#estudiantesElements").hide();
+
 
     });
 
@@ -437,6 +515,7 @@
                 }
                $("#estudiantesElements").show();
                 //alert("Lista de estudiantes " + estudiantesList);
+                //alert("IDS ESTUDIANTES " + estudiantesIds)
             }
 
         });
@@ -771,12 +850,15 @@
             estudianteComas = $("#estudiantes").val().split(", ");
         }
         //alert("Lista de estudiantes " + estudianteComas );
+        //alert("Lista coma tamano " + estudianteComas.length);
+        console.log(estudianteComas);
         for(var key in estudianteComas) {
             //alert("Valor de estudiantes " + estudianteComas[key]);
             //alert(estudiantesList.indexOf(estudianteComas[key]));
             if (estudiantesList.indexOf(estudianteComas[key]) >= 0){
-                estudianteIds.push(estudiantesIds[estudianteComas.indexOf(estudianteComas[key])]);
-                //alert(estudianteIds);
+                //estudianteIds.push(estudiantesIds[estudianteComas.indexOf(estudianteComas[key])]);
+                estudianteIds.push(estudiantesIds[estudiantesList.indexOf(estudianteComas[key])]);
+                alert(estudiantesIds);
             }
         }
 
@@ -832,24 +914,27 @@
 
             }
             //alert("Parametros " +p);
-            alert(valores);
+            //alert(valores);
             parametros.push(p);
             valoresParametros.push(valores);
             //console.log(parametros);
-            console.log(valoresParametros);
+            //console.log(valoresParametros);
             p = [];
             valores = [];
             count++;
 
         });
 
-        //alert("Valores " + valoresParametros);
+        var fechaInicio = new Date($("#fechaInicio_year").val(),$("#fechaInicio_month").val()-1,$("#fechaInicio_day").val()).toLocaleDateString();
+        var fechaFin = new Date($("#fechaFin_year").val(),$("#fechaFin_month").val()-1,$("#fechaFin_day").val()).toLocaleDateString();
 
+        //alert("Valores " + valoresParametros);
+        //alert("FEcha " + fechaInicio);
         jQuery.ajax({
             url: "${createLink(controller: 'asignarActividad', action: 'guardarActividad')}",
             type: "POST",
             traditional: true,
-            data: {juegosId: juegoIds,estudiantesId:estudianteIds,categoriaIds:categoriaIds,materiasId:materiasId,gruposId:grupoIds,parametros:parametros,valoresParamatros:valoresParametros},
+            data: {juegosId: juegoIds,estudiantesId:estudianteIds,categoriaIds:categoriaIds,materiasId:materiasId,gruposId:grupoIds,parametros:parametros,valoresParamatros:valoresParametros,fechaInicio:fechaInicio,fechaFin:fechaFin},
             success: function (data) {
 
 
@@ -863,6 +948,7 @@
     (function() {
         startDraggables();
     })();
+
 </script>
 </body>
 </html>

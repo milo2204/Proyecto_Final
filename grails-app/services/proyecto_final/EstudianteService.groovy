@@ -32,7 +32,8 @@ class EstudianteService {
         grupo.save(flush: true, failOnError: true)
     }
 
-    def guardarActividad(List juegoIds,List categoriaIds, List estudianteIds, Long materiaId, Long grupoId,List parametros,List valorParametros){
+    def guardarActividad(List juegoIds,List categoriaIds, List estudianteIds, Long materiaId, Long grupoId,List parametros,List valorParametros,Date fechaFin,
+                         Date fechaInicio){
         List<Estudiante> estudiantes = new ArrayList()
         List<Juego> juegos = new ArrayList()
         List<Actividad> actList = new ArrayList()
@@ -46,6 +47,9 @@ class EstudianteService {
             def act = new Actividad()
             act.juego = juego
             act.nombre = juego.nombre
+            act.fechaInicio = fechaInicio
+            act.fechaFin = fechaFin
+            act.fechaCreada = new Date()
             act.save(flush: true,failOnError: true)
             actList.add(act)
             juegos.add(juego)
@@ -99,16 +103,32 @@ class EstudianteService {
 
         for(Integer i = 0;i<actList.size();i++){
             def act = Actividad.get(actList.get(i).getId())
-            for(id in estudianteIds){
-                def est = Estudiante.get(id)
-                RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
-                ea.estudiante = est
-                ea.actividad = act
-                ea.save(flush: true,failOnError: true)
+                for (id in estudianteIds) {
+                    def est = Estudiante.get(id)
+                    RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
+                    ea.estudiante = est
+                    ea.actividad = act
+                    est.addToRegistroEstudianteActividades(ea)
+                    act.addToRegistroEstAct(ea)
+                    ea.save(flush: true, failOnError: true)
+                    est.save(flush: true,failOnError: true)
+                    act.save(flush: true,failOnError: true)
 
+                }
 
-            }
         }
+
+        /*for(id in estudianteIds){
+            def est = Estudiante.get(id)
+
+                for(Integer i = 0;i<actList.size();i++){
+                    def act = Actividad.get(actList.get(i).getId())
+                    est.addToActividades(act).save(flush: true,failOnError: true)
+                }
+            }
+
+
+        }*/
 
     }
 

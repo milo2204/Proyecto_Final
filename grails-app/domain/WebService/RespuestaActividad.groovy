@@ -13,6 +13,7 @@ class RespuestaActividad {
     int cantidadRespuestasIncorrectas;
     Date fecha = new Date();
     int puntuacion;
+    static belongsTo = [actividad:Actividad]
 
     static constraints = {
         cantidadRespuestasCorrectas blank: false, nullable:false
