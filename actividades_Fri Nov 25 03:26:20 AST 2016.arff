@@ -1,0 +1,7 @@
+@relation actividades
+
+@attribute juego {ARITMETICA,TRAZAR,MEMORIZAR,VOCABULARIO}@attribute numeroJugadas {0,1,2,3,4,5}@attribute nivelDificultad {0,1,2,3,4,5,6,7,8,9,10}@attribute numeroMaximo {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,16,17,18,19,20}@attribute numeroMinimo {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,16,17,18,19,20}@attribute categoria {SUMAR,RESTAR,SUMAR_RESTAR,NUMEROS,LETRAS,FIGURAS,IMAGENES,COLORES,VEHICULOS,ANIMALES,FRUTAS,VEGETALES}
+
+@data
+
+ARITMETICA

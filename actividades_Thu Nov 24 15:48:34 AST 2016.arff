@@ -1,0 +1,7 @@
+@relation actividades
+
+@attribute juego {ARITMETICA,TRAZAR,MEMORIZAR,VOCABULARIO}
+
+@data
+
+ARITMETICA
