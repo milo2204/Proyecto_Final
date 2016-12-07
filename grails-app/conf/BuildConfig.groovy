@@ -64,6 +64,7 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.8'
         //compile ':spring-security-core:2.0.0'
         compile "org.grails.plugins:bcrypt:1.0"
+        compile "org.grails.plugins:create-domain-uml:0.5"
 
         // asset-pipeline 2.0+ requires Java 7, use version 1.9.x with Java 6
         compile ":asset-pipeline:2.5.7"

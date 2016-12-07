@@ -1,9 +1,10 @@
 import org.apache.catalina.core.ApplicationContext
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.grails.datastore.mapping.query.Query
 import proyecto_final.Actividad
 import proyecto_final.Categoria
+import proyecto_final.CobWebController
 import proyecto_final.Estudiante
-import proyecto_final.EstudiantesActividades
 import proyecto_final.Grupo
 import proyecto_final.Juego
 import WebService.RespuestaActividad
@@ -14,10 +15,12 @@ import proyecto_final.RegistroRespuestaAct
 import proyecto_final.Role
 import proyecto_final.User
 import proyecto_final.UserRole
+import weka.clusterers.ClusterEvaluation
 import weka.clusterers.Cobweb
 import weka.core.Instance
 import weka.core.Instances
 import weka.core.converters.ArffLoader
+
 
 import java.time.LocalDate
 
@@ -256,7 +259,7 @@ class BootStrap {
         a.save(flush: true, failOnError: true)
 
         Actividad b = new Actividad()
-        b.juego = trazar
+        b.juego = memorizar
         b.nombre = memorizar.nombre
         b.categoria = numerosMemorizarCat
         b.fechaInicio = newDate
@@ -286,12 +289,12 @@ class BootStrap {
         e.save(flush: true, failOnError: true)
 
         def eActividades = RegistroEstudiantesActividades.findAllByEstudiante(estu)
-        println("El tamaño de la lista " + eActividades.size())
-
-
+        //println("El tamaño de la lista " + eActividades.size())
 
         RespuestaActividad resp = new RespuestaActividad()
         resp.actividad = act
+        resp.cantidadRespuestasCorrectas = 10
+        resp.cantidadRespuestasIncorrectas = 50
         resp.save(flush: true, failOnError: true)
 
         RespuestaActividad r = new RespuestaActividad()
@@ -314,9 +317,16 @@ class BootStrap {
         model.updateFinished()
         println model*/
 
+        def json = new JSONObject()
         ArffLoader loader = new ArffLoader();
         loader.setFile(new File("/Users/Mikey/IdeaProjects/Proyecto_Final/web-app/datasets/bank-data.arff"));
         Instances structure = loader.getStructure();
+
+        /*Instances data = loader.getDataSet();
+        for(Instance inst : data){
+            System.out.println("Instance:" + inst);
+        }*/
+
         // train Cobweb
         Cobweb cw = new Cobweb();
         cw.buildClusterer(structure);
@@ -325,7 +335,41 @@ class BootStrap {
             cw.updateClusterer(current)
         }
         cw.updateFinished()
-        println cw
+
+        json.put("lA SHIT",cw)
+
+        ClusterEvaluation eval = new ClusterEvaluation()
+        eval.setClusterer(cw)
+        eval.evaluateClusterer(structure)
+        print eval.getClusterAssignments()
+
+        println eval.clusterResultsToString()
+        //println cw.toString()
+
+        //println("Este es el attributo " + cw.getTreeRoot().m_clusterInstances.get(0).toString(1))
+        /*println("SIZE m_children" + cw.getTreeRoot().m_children.size())
+        println("SIZE m_clusterInstances" + cw.getTreeRoot().m_children.get(0).m_clusterInstances.size())
+        println("SIZE m_clusterInstances" + cw.getTreeRoot().m_children.get(1).m_clusterInstances.size())
+        println("SIZE m_clusterInstances" + cw.getTreeRoot().m_children.get(2).m_clusterInstances.size())
+        println("SIZE m_clusterInstances" + cw.getTreeRoot().m_children.get(3).m_clusterInstances.size())*/
+
+
+        /*def fileArff = new File("./actividades_${new Date()}.arff")
+        fileArff.createNewFile()
+        fileArff.write("@relation actividades")
+        fileArff.append("\n\n")
+        fileArff.append("@attribute juego {ARITMETICA,TRAZAR,MEMORIZAR,VOCABULARIO}")
+        fileArff.append("@attribute numeroJugadas {0,1,2,3,4,5}")
+        fileArff.append("@attribute nivelDificultad {0,1,2,3,4,5,6,7,8,9,10}")
+        fileArff.append("@attribute numeroMaximo {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,16,17,18,19,20}")
+        fileArff.append("@attribute numeroMinimo {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,16,17,18,19,20}")
+        fileArff.append("@attribute categoria {SUMAR,RESTAR,SUMAR_RESTAR,NUMEROS,LETRAS,FIGURAS,IMAGENES,COLORES,VEHICULOS,ANIMALES,FRUTAS,VEGETALES}")
+
+        fileArff.append("\n\n")
+        fileArff.append("@data")
+        fileArff.append("\n\n")
+        fileArff.append("ARITMETICA")*/
+
 
     }
 

@@ -14,5 +14,5 @@ int cantidadRespuestasIncorrectas
 int puntuacion
 String idActividad
 Date fecha
-
+String segundos
 }

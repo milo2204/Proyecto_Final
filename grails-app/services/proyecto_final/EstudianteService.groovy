@@ -1,5 +1,6 @@
 package proyecto_final
 
+import WebService.RespuestaActividad
 import grails.plugin.cache.CacheEvict
 import grails.transaction.Transactional
 
@@ -101,35 +102,48 @@ class EstudianteService {
             act.save(flush: true,failOnError: true)
         }
 
-        for(Integer i = 0;i<actList.size();i++){
+        for(Integer i = 0;i<actList.size();i++) {
             def act = Actividad.get(actList.get(i).getId())
-                for (id in estudianteIds) {
-                    def est = Estudiante.get(id)
-                    RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
-                    ea.estudiante = est
-                    ea.actividad = act
-                    est.addToRegistroEstudianteActividades(ea)
-                    act.addToRegistroEstAct(ea)
-                    ea.save(flush: true, failOnError: true)
-                    est.save(flush: true,failOnError: true)
-                    act.save(flush: true,failOnError: true)
+            for (id in estudianteIds) {
+                def est = Estudiante.get(id)
+                RegistroEstudiantesActividades ea = new RegistroEstudiantesActividades()
+                ea.estudiante = est
+                ea.actividad = act
+                est.addToRegistroEstudianteActividades(ea)
+                act.addToRegistroEstAct(ea)
+                ea.save(flush: true, failOnError: true)
+                est.save(flush: true, failOnError: true)
+                act.save(flush: true, failOnError: true)
 
-                }
-
-        }
-
-        /*for(id in estudianteIds){
-            def est = Estudiante.get(id)
-
-                for(Integer i = 0;i<actList.size();i++){
-                    def act = Actividad.get(actList.get(i).getId())
-                    est.addToActividades(act).save(flush: true,failOnError: true)
-                }
             }
 
 
-        }*/
+        }
+    }
 
+    /*def ArrayList graficarActividad(Long estuId){
+        def est = Estudiante.findById(estuId)
+        def re = est.getRegistroEstudianteActividades().actividad
+        List<RespuestaActividad> resList = new ArrayList<>()
+        for(act in re){
+            def res = RespuestaActividad.findByActividad(act)
+            resList.add(res)
+        }
+        return resList
+    }*/
+
+    def ArrayList graficarActividad(Long estuId,String juego){
+        def est = Estudiante.findById(estuId)
+        def re = est.getRegistroEstudianteActividades().actividad
+        List<RespuestaActividad> resList = new ArrayList<>()
+        for(act in re){
+            if(act.categoria.getName() == juego){
+                def res = RespuestaActividad.findByActividad(act)
+                resList.add(res)
+            }
+
+        }
+        return resList
     }
 
 }

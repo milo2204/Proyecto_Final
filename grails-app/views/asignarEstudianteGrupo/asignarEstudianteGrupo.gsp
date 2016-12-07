@@ -81,10 +81,22 @@
                             <li><a><i class="fa fa-home"></i> General <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
                                     <li><a href="${createLink(uri: '/')}">Inicio</a></li>
-                                    <li><a href="#">Juegos</a></li>
-                                    <li><a href="#">Categorias</a></li>
-                                    <li><a href="#">Actividades</a></li>
-                                    <li><a href="${resource(dir: 'respuestaActividad', file: 'index')}">Respuestas Actividades</a></li>
+                                    <li><a>Crear<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="${createLink(uri:'/crearMateria/crearMateria')}">Materia</a></li>
+                                            <li><a href="${createLink(uri:'/crearGrupo/crearGrupo')}">Grupo</a></li>
+                                            <li><a href="${createLink(uri:'/crearProfesor/crearProfesor')}">Profesor</a></li>
+                                            <li><a href="${createLink(uri:'/crearEstudiante/crearEstudiante')}">Estudiante</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a>Asignar<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="${createLink(uri:'/asignarProfesorGrupo/asignarProfesorGrupo')}">Profesor a Grupo</a></li>
+                                            <li><a href="${createLink(uri:'/asignarEstudianteGrupo/asignarEstudianteGrupo')}">Estudiante a Grupo</a></li>
+                                            <li><a href="${createLink(uri:'/asignarActividad/asignarActividad')}">Actividad a Estudiante</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="${createLink(uri: '/respuestaActividad/index')}">Respuestas Actividades</a></li>
                                 </ul>
                             </li>
                         </ul>

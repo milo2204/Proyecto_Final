@@ -24,6 +24,10 @@ public  java.util.Date getFecha() { return (java.util.Date)null;}
 public  void setFecha(java.util.Date value) { }
 public  int getPuntuacion() { return (int)0;}
 public  void setPuntuacion(int value) { }
+public  float getSegundos() { return (float)0;}
+public  void setSegundos(float value) { }
+public static  java.lang.Object getBelongsTo() { return null;}
+public static  void setBelongsTo(java.lang.Object value) { }
 public static  java.lang.Object getConstraints() { return null;}
 public static  void setConstraints(java.lang.Object value) { }
 public static  java.lang.Object getMapping() { return null;}

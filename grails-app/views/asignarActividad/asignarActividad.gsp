@@ -476,7 +476,6 @@
         $("#gruposElements").hide();
         $("#estudiantesElements").hide();
 
-
     });
 
 
@@ -851,14 +850,13 @@
         }
         //alert("Lista de estudiantes " + estudianteComas );
         //alert("Lista coma tamano " + estudianteComas.length);
-        console.log(estudianteComas);
         for(var key in estudianteComas) {
             //alert("Valor de estudiantes " + estudianteComas[key]);
             //alert(estudiantesList.indexOf(estudianteComas[key]));
             if (estudiantesList.indexOf(estudianteComas[key]) >= 0){
                 //estudianteIds.push(estudiantesIds[estudianteComas.indexOf(estudianteComas[key])]);
                 estudianteIds.push(estudiantesIds[estudiantesList.indexOf(estudianteComas[key])]);
-                alert(estudiantesIds);
+                //alert(estudiantesList.indexOf(estudianteComas[key]));
             }
         }
 

@@ -36,10 +36,18 @@ public  java.lang.String getParametros() { return (java.lang.String)null;}
 public  void setParametros(java.lang.String value) { }
 public  proyecto_final.Categoria getCategoria() { return (proyecto_final.Categoria)null;}
 public  void setCategoria(proyecto_final.Categoria value) { }
-public static  java.lang.Object getHasMany() { return null;}
-public static  void setHasMany(java.lang.Object value) { }
+public  proyecto_final.Juego getJuego() { return (proyecto_final.Juego)null;}
+public  void setJuego(proyecto_final.Juego value) { }
+public  java.util.Date getFechaInicio() { return (java.util.Date)null;}
+public  void setFechaInicio(java.util.Date value) { }
+public  java.util.Date getFechaFin() { return (java.util.Date)null;}
+public  void setFechaFin(java.util.Date value) { }
+public  java.util.Date getFechaCreada() { return (java.util.Date)null;}
+public  void setFechaCreada(java.util.Date value) { }
 public static  java.lang.Object getBelongsTo() { return null;}
 public static  void setBelongsTo(java.lang.Object value) { }
+public static  java.lang.Object getHasMany() { return null;}
+public static  void setHasMany(java.lang.Object value) { }
 public static  java.lang.Object getMapping() { return null;}
 public static  void setMapping(java.lang.Object value) { }
 public static  java.lang.Object getConstraints() { return null;}

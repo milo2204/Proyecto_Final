@@ -26,4 +26,6 @@ public  java.lang.String getIdActividad() { return (java.lang.String)null;}
 public  void setIdActividad(java.lang.String value) { }
 public  java.util.Date getFecha() { return (java.util.Date)null;}
 public  void setFecha(java.util.Date value) { }
+public  java.lang.String getSegundos() { return (java.lang.String)null;}
+public  void setSegundos(java.lang.String value) { }
 }
